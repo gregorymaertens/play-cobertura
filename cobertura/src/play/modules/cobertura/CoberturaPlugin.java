@@ -126,13 +126,7 @@ public class CoberturaPlugin extends PlayPlugin {
 		if (!Play.runningInTestMode()) {
 			return;
 		}
-		
-		String playTmpValue = Play.configuration.getProperty("play.tmp");
-		if(!"none".equals(playTmpValue)){
-			Logger.warn("Actually play.tmp is set to %s. Set it to play.tmp=none", Play.configuration.getProperty("play.tmp"));
-		}
-		
-		
+
 		// set up Cobertura configuration
 		initCobertura();
 
