@@ -195,7 +195,7 @@ public class CoberturaPlugin extends PlayPlugin {
 			// but remember that we need to refresh all classes
 			refreshAllClasses = true;
 
-			throw new RuntimeException();
+			Logger.warn("Classes are changed during coverage creation. Resulting coverage may be wrong.");
 		}
 	}
 
@@ -203,10 +203,10 @@ public class CoberturaPlugin extends PlayPlugin {
 	 * Adjust Play configuration after it is read.
 	 * 
 	 * <P>
-	 * In this method, we force Play's to not use a temporary directory.
-	 * The rationale behind this is that the tmp directory is used to cache
-	 * compiled bytecode. However, since Cobertura instruments this bytecode,
-	 * caching it may cause problems when running in other modes.
+	 * In this method, we force Play's to not use a temporary directory. The
+	 * rationale behind this is that the tmp directory is used to cache compiled
+	 * bytecode. However, since Cobertura instruments this bytecode, caching it
+	 * may cause problems when running in other modes.
 	 * </P>
 	 * 
 	 * @see play.PlayPlugin#onConfigurationRead()
@@ -224,9 +224,7 @@ public class CoberturaPlugin extends PlayPlugin {
 	 * 
 	 * <P>
 	 * If we detected a changed Java class being recompiled, this means
-	 * Cobertura's coverage data will be partly expired. An exception is thrown
-	 * because continuing in this situation would lead to erroneous coverage
-	 * data.
+	 * Cobertura's coverage data will be partly expired.
 	 * </P>
 	 * 
 	 * <P>
@@ -235,15 +233,13 @@ public class CoberturaPlugin extends PlayPlugin {
 	 * data on all classes. This is not currently implemented.
 	 * </P>
 	 * 
-	 * @throws Exception
-	 * 
 	 * @see play.PlayPlugin#onApplicationStop()
 	 */
 	@Override
 	public void onApplicationStop() {
 		if (refreshAllClasses) {
 			// we should refresh all classes now, but we can't currently
-			throw new RuntimeException();
+			Logger.warn("Classes are changed during coverage creation. Resulting coverage may be wrong.");
 		}
 	}
 	
