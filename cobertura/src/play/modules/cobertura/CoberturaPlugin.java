@@ -33,6 +33,7 @@ import net.sourceforge.cobertura.coveragedata.CoverageDataFileHandler;
 import net.sourceforge.cobertura.coveragedata.ProjectData;
 import net.sourceforge.cobertura.instrument.ClassInstrumenter;
 import net.sourceforge.cobertura.util.FileLocker;
+import net.sourceforge.cobertura.util.IOUtil;
 
 import org.apache.oro.text.GlobCompiler;
 import org.apache.oro.text.regex.MalformedPatternException;
@@ -47,6 +48,7 @@ import play.Logger;
 import play.Play;
 import play.PlayPlugin;
 import play.classloading.ApplicationClasses.ApplicationClass;
+import play.libs.IO;
 import play.mvc.Router;
 import play.vfs.VirtualFile;
 
@@ -274,7 +276,6 @@ public class CoberturaPlugin extends PlayPlugin {
 		// - Don't instrument classes matching regex expression
 		String ignoreRegexString = Play.configuration.getProperty("cobertura.ignore.regex", DEFAULT_REGEX_IGNORE);
 		
-		
 		// Get regexes from config
 		if(ignoreRegexString != null && ignoreRegexes.isEmpty()){
 			String[] ignoreRegTab = ignoreRegexString.split(",");
@@ -301,27 +302,26 @@ public class CoberturaPlugin extends PlayPlugin {
 		}
 		
 		
-
 		Logger.trace("Cobertura plugin: Instrumenting class %s", applicationClass.name);
 
 		// instrument!
 		// this is copied from net.sourceforge.cobertura.instrument.Main
 		InputStream inputStream = null;
-		ClassWriter cw;
-		ClassInstrumenter cv;
 		try {
 			inputStream = new ByteArrayInputStream(applicationClass.enhancedByteCode);
 			ClassReader cr = new ClassReader(inputStream);
-			cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-			cv = new ClassInstrumenter(projectData, cw, ignoreRegexes, ignoreBranchesRegexes);
+			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+			ClassInstrumenter cv = new ClassInstrumenter(projectData, cw, ignoreRegexes, ignoreBranchesRegexes);
 			cr.accept(cv, 0);
+
+			// save back to class representation in Play!
+			applicationClass.enhancedByteCode = cw.toByteArray();
 		} catch (Throwable t) {
 			Logger.error("Unable to instrument class " + applicationClass.name + " (" + t + ")", t);
 			return;
+		} finally {
+			IOUtil.closeInputStream(inputStream);
 		}
-
-		// save back to class representation in Play!
-		applicationClass.enhancedByteCode = cw.toByteArray();
 
 		// record this enhanced class as an unsaved change
 		unsavedChanges++;
