@@ -123,7 +123,7 @@ public class CoberturaPlugin extends PlayPlugin {
 	@Override
 	public void onLoad() {
 		// only use this plugin if we're in test mode
-		if (!Play.runningInTestMode()) {
+		if (!Play.runingInTestMode()) {
 			return;
 		}
 
@@ -158,7 +158,7 @@ public class CoberturaPlugin extends PlayPlugin {
 	@Override
 	public void onApplicationStart() {
 		// only use this plugin if we're in test mode
-		if (!Play.runningInTestMode()) {
+		if (!Play.runingInTestMode()) {
 			return;
 		}
 		
@@ -214,7 +214,7 @@ public class CoberturaPlugin extends PlayPlugin {
 	@Override
 	public void onConfigurationRead() {
 		// only use this plugin if we're in test mode
-		if (!Play.runningInTestMode()) {
+		if (!Play.runingInTestMode()) {
 			return;
 		}
 	}
@@ -265,7 +265,7 @@ public class CoberturaPlugin extends PlayPlugin {
 	@Override
 	public void enhance(ApplicationClass applicationClass) {
 		// only use this plugin if we're in test mode
-		if (!Play.runningInTestMode()) {
+		if (!Play.runingInTestMode()) {
 			return;
 		}
 		
