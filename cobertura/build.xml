@@ -46,22 +46,22 @@
 	-->
 	<target name="getCobertura" depends="init">
 		<mkdir dir="tmp" />
-		<get src="http://sourceforge.net/projects/cobertura/files/cobertura/1.9.2/cobertura-1.9.2-src.tar.gz/download" dest="tmp/cobertura-1.9.2-src.tar.gz" usetimestamp="true" />
+		<get skipexisting="true" verbose="true" src="http://sourceforge.net/projects/cobertura/files/cobertura/1.9.4/cobertura-1.9.4-src.tar.gz/download" dest="tmp/cobertura-1.9.4-src.tar.gz" usetimestamp="true" />
 
-		<untar src="tmp/cobertura-1.9.2-src.tar.gz" dest="tmp/" compression="gzip" />
+		<untar src="tmp/cobertura-1.9.4-src.tar.gz" dest="tmp/" compression="gzip" />
 
-		<patch patchfile="public-instrumenter-20090803.patch" dir="tmp/cobertura-1.9.2/" strip="0" />
+		<patch patchfile="public-instrumenter-20090803.patch" dir="tmp/cobertura-1.9.4/" strip="0" />
 
 		<!-- Following 2 commands are a hack to make Cobertura's build work -->
-		<mkdir dir="tmp/cobertura-1.9.2/jetty" />
-		<delete dir="tmp/cobertura-1.9.2/src/net/sourceforge/cobertura/webapp/" />
+		<mkdir dir="tmp/cobertura-1.9.4/jetty" />
+		<delete dir="tmp/cobertura-1.9.4/src/net/sourceforge/cobertura/webapp/" />
 
-		<ant antfile="build.xml" target="jar" dir="tmp/cobertura-1.9.2/" />
+		<ant antfile="build.xml" target="jar" dir="tmp/cobertura-1.9.4/" />
 
-		<copy file="tmp/cobertura-1.9.2/build/dist/eclipse/cobertura-main.jar" todir="lib/" preservelastmodified="true" />
-		<copy file="tmp/cobertura-1.9.2/lib/asm-3.0.jar" todir="lib/" preservelastmodified="true" />
-		<copy file="tmp/cobertura-1.9.2/lib/asm-tree-3.0.jar" todir="lib/" preservelastmodified="true" />
-		<copy file="tmp/cobertura-1.9.2/lib/jakarta-oro-2.0.8.jar" todir="lib/" preservelastmodified="true" />
+		<copy file="tmp/cobertura-1.9.4/build/dist/eclipse/cobertura-main.jar" todir="lib/" preservelastmodified="true" />
+		<copy file="tmp/cobertura-1.9.4/lib/asm-3.0.jar" todir="lib/" preservelastmodified="true" />
+		<copy file="tmp/cobertura-1.9.4/lib/asm-tree-3.0.jar" todir="lib/" preservelastmodified="true" />
+		<copy file="tmp/cobertura-1.9.4/lib/jakarta-oro-2.0.8.jar" todir="lib/" preservelastmodified="true" />
 	</target>
 
 	<target name="javadoc" depends="init">
